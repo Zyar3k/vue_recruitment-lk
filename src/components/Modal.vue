@@ -13,15 +13,16 @@
                >
                <div class="control">
                   <input
-                     ref="name"
                      class="input"
                      type="text"
                      placeholder="Please enter name"
+                     name="name"
+                     v-model="item.name"
                   />
                </div>
             </div>
             <div class="select m-5 mb-6">
-               <select>
+               <select name="status" v-model="item.status">
                   <option value="verified">Verified</option>
                   <option value="unverified">unverified</option>
                </select>
@@ -59,12 +60,25 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 export default {
-   setup(_, { emit }) {
+   props: {
+      itemData: {
+         type: Object,
+         default: () => ({})
+      }
+   },
+   setup(props, { emit }) {
       const closeModal = () => emit('close-modal')
 
+      const item = ref({
+         name: props.itemData.name,
+         status: props.itemData.name
+      })
+
       return {
-         closeModal
+         closeModal,
+         item
       }
    }
 }

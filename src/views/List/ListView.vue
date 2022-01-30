@@ -11,7 +11,11 @@
          </div>
       </div>
       <Table :content="tableContent" :config="tableConfig" @select="onSelect" />
-      <Modal v-if="isModalOpen" @close-modal="onCloseModal" />
+      <Modal
+         v-if="isModalOpen"
+         @close-modal="onCloseModal"
+         :itemData="itemData"
+      />
    </div>
 </template>
 <script>
@@ -37,6 +41,7 @@ export default {
       const isModalOpen = ref(true)
 
       const state = reactive({
+         currentItem: null,
          items: [],
          initLoading: true,
          search: '',
@@ -46,10 +51,17 @@ export default {
       const tableContent = computed(() =>
          state.items.filter(item => filterList(item, state.search)).map(mapList)
       )
+
+      const itemData = computed(() => {
+         if (!state.currentItem) return {}
+         return state.currentItem
+      })
+
       const onInput = ({ target: { value } }) => {
          clearTimeout(timeout)
          state.timeout = setTimeout(() => (state.search = value), 500)
       }
+
       const mockRequest = () => {
          return new Promise(resolve => {
             setTimeout(() => {
@@ -72,8 +84,10 @@ export default {
       const onCloseModal = () => {
          isModalOpen.value = false
       }
+
       return {
          isModalOpen,
+         itemData,
          onCloseModal,
          onInput,
          onSelect,

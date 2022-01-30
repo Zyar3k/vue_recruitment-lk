@@ -9,7 +9,8 @@ We've made this little task for you, to make sure that You are able to work with
  - Fix unit test - test should check if Table.vue renders and emits events correctly.
 
 
- - Add modal item editor - allow user to edit list items with form in modal after clicking on one of the items. User should be able to save or discard changes. Allow to update name with text input and status with select input. Changes should be saved in state of ListView.vue. Use Bulma scss classes to make it simpler (it is already installed).
+ <!-- - Add modal item editor - allow user to edit list items with form in modal after clicking on one of the items. -->
+ - User should be able to save or discard changes. Allow to update name with text input and status with select input. Changes should be saved in state of ListView.vue. Use Bulma scss classes to make it simpler (it is already installed).
 
 
 
