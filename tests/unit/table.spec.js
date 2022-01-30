@@ -12,8 +12,8 @@ describe('Check table component', () => {
       expect(rows[0].text()).toBe(content[0].foo)
    })
    it('Emits on select', async () => {
-      // await rows[0].trigger('click')
-      // const emit = wrapper.emitted('click')[0]
-      // expect(emit[0]).toEqual(content[0])
+      await rows[0].trigger('click')
+      const emit = wrapper.emitted('select')[0]
+      expect(emit[0]).toEqual(content[0])
    })
 })
