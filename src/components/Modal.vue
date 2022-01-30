@@ -2,7 +2,7 @@
    <div class="modal is-active">
       <div class="modal-background" @click="closeModal"></div>
       <div class="modal-content">
-         <div @submit.prevent="" class="card p-6">
+         <div class="card p-6">
             <h2 class="has-text-black is-size-5 has-text-weight-bold">
                Edit Nursery
             </h2>
