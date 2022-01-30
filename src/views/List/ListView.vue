@@ -10,17 +10,19 @@
             />
          </div>
       </div>
-      <Table :content="tableContent" :config="tableConfig" />
+      <Table :content="tableContent" :config="tableConfig" @select="onSelect" />
+      <Modal v-if="isModalOpen" @close-modal="onCloseModal" />
    </div>
 </template>
 <script>
 import Table from '@/components/Table.vue'
-import { computed, onMounted, reactive } from 'vue'
+import Modal from '@/components/Modal.vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { filterList, mapList } from './listHelper'
 import dummy from '@/assets/dummy.json'
 import timeout from 'q'
 export default {
-   components: { Table },
+   components: { Table, Modal },
    setup() {
       const tableConfig = {
          columns: [
@@ -31,12 +33,16 @@ export default {
             { key: 'status', header: 'Status' }
          ]
       }
+
+      const isModalOpen = ref(true)
+
       const state = reactive({
          items: [],
          initLoading: true,
          search: '',
          timeout
       })
+
       const tableContent = computed(() =>
          state.items.filter(item => filterList(item, state.search)).map(mapList)
       )
@@ -49,14 +55,31 @@ export default {
             setTimeout(() => {
                state.items = dummy
                resolve()
-            }, 500)
+            }, 5) // simulate server latency change after work
          })
       }
+
       onMounted(async () => {
          await mockRequest()
          state.loading = false
       })
-      return { tableContent, tableConfig, onInput }
+
+      const onSelect = row => {
+         state.currentItem = row
+         isModalOpen.value = true
+      }
+
+      const onCloseModal = () => {
+         isModalOpen.value = false
+      }
+      return {
+         isModalOpen,
+         onCloseModal,
+         onInput,
+         onSelect,
+         tableConfig,
+         tableContent
+      }
    }
 }
 </script>

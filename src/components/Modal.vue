@@ -1,0 +1,73 @@
+<template>
+   <div class="modal is-active">
+      <div class="modal-background" @click="closeModal"></div>
+      <div class="modal-content">
+         <form class="card p-6">
+            <h2 class="has-text-black is-size-5 has-text-weight-bold">
+               Edit Nursery
+            </h2>
+            <div class="field">
+               <label
+                  class="label has-text-black is-size-6 has-text-left has-text-weight-bold"
+                  >Name</label
+               >
+               <div class="control">
+                  <input
+                     ref="name"
+                     class="input"
+                     type="text"
+                     placeholder="Please enter name"
+                  />
+               </div>
+            </div>
+            <div class="select m-5 mb-6">
+               <select>
+                  <option value="verified">Verified</option>
+                  <option value="unverified">unverified</option>
+               </select>
+            </div>
+            <div
+               class="field is-grouped is-flex is-justify-content-space-around"
+            >
+               <div class="control">
+                  <button
+                     type="submit"
+                     aria-label="close"
+                     class="button is-link"
+                  >
+                     Submit
+                  </button>
+               </div>
+               <div class="control">
+                  <button
+                     type="submit"
+                     aria-label="close"
+                     class="button is-light"
+                  >
+                     Discard
+                  </button>
+               </div>
+            </div>
+         </form>
+         <button
+            class="modal-close is-large"
+            aria-label="close"
+            @click="closeModal"
+         ></button>
+      </div>
+   </div>
+</template>
+
+<script>
+export default {
+   setup(_, { emit }) {
+      const closeModal = () => emit('close-modal')
+
+      return {
+         closeModal
+      }
+   }
+}
+</script>
+
+<style></style>
