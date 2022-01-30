@@ -13,8 +13,9 @@
       <Table :content="tableContent" :config="tableConfig" @select="onSelect" />
       <Modal
          v-if="isModalOpen"
-         @close-modal="onCloseModal"
          :itemData="itemData"
+         @submit="onSubmit"
+         @close-modal="onCloseModal"
       />
    </div>
 </template>
@@ -37,9 +38,7 @@ export default {
             { key: 'status', header: 'Status' }
          ]
       }
-
-      const isModalOpen = ref(true)
-
+      const isModalOpen = ref(false)
       const state = reactive({
          currentItem: null,
          items: [],
@@ -47,50 +46,54 @@ export default {
          search: '',
          timeout
       })
-
       const tableContent = computed(() =>
          state.items.filter(item => filterList(item, state.search)).map(mapList)
       )
-
       const itemData = computed(() => {
          if (!state.currentItem) return {}
          return state.currentItem
       })
-
       const onInput = ({ target: { value } }) => {
          clearTimeout(timeout)
          state.timeout = setTimeout(() => (state.search = value), 500)
       }
-
       const mockRequest = () => {
          return new Promise(resolve => {
             setTimeout(() => {
                state.items = dummy
                resolve()
-            }, 5) // simulate server latency change after work
+            }, 500)
          })
       }
-
       onMounted(async () => {
          await mockRequest()
          state.loading = false
       })
-
       const onSelect = row => {
          state.currentItem = row
          isModalOpen.value = true
       }
-
       const onCloseModal = () => {
          isModalOpen.value = false
       }
-
+      const onSubmit = ({ name, status }) => {
+         const item = state.items.find(item => item.id === state.currentItem.id)
+         if (name === '') {
+            alert('Name is required')
+         } else {
+            item.name = name
+            item.status = status
+            isModalOpen.value = false
+            state.currentItem = null
+         }
+      }
       return {
          isModalOpen,
          itemData,
          onCloseModal,
          onInput,
          onSelect,
+         onSubmit,
          tableConfig,
          tableContent
       }

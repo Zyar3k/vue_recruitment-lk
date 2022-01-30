@@ -2,7 +2,7 @@
    <div class="modal is-active">
       <div class="modal-background" @click="closeModal"></div>
       <div class="modal-content">
-         <form class="card p-6">
+         <div @submit.prevent="" class="card p-6">
             <h2 class="has-text-black is-size-5 has-text-weight-bold">
                Edit Nursery
             </h2>
@@ -24,7 +24,7 @@
             <div class="select m-5 mb-6">
                <select name="status" v-model="item.status">
                   <option value="verified">Verified</option>
-                  <option value="unverified">unverified</option>
+                  <option value="unverified">Unverified</option>
                </select>
             </div>
             <div
@@ -35,6 +35,7 @@
                      type="submit"
                      aria-label="close"
                      class="button is-link"
+                     @click="onSubmit"
                   >
                      Submit
                   </button>
@@ -44,12 +45,13 @@
                      type="submit"
                      aria-label="close"
                      class="button is-light"
+                     @click="closeModal"
                   >
                      Discard
                   </button>
                </div>
             </div>
-         </form>
+         </div>
          <button
             class="modal-close is-large"
             aria-label="close"
@@ -70,18 +72,18 @@ export default {
    },
    setup(props, { emit }) {
       const closeModal = () => emit('close-modal')
-
       const item = ref({
          name: props.itemData.name,
-         status: props.itemData.name
+         status: props.itemData.status
       })
-
+      const onSubmit = () => {
+         emit('submit', item.value)
+      }
       return {
          closeModal,
-         item
+         item,
+         onSubmit
       }
    }
 }
 </script>
-
-<style></style>
