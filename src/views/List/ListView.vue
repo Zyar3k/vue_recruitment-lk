@@ -1,13 +1,16 @@
 <template>
    <div class="p-2">
       <div class="field">
-         <div class="control">
+         <div class="control is-flex">
             <input
                @input="onInput"
                placeholder="Type here..."
                type="text"
                class="input"
             />
+            <button @click="openCreate" class="ml-2 button is-link ">
+               Create New Nursery
+            </button>
          </div>
       </div>
       <Table :content="tableContent" :config="tableConfig" @select="onSelect" />
@@ -17,17 +20,19 @@
          @submit="onSubmit"
          @close-modal="onCloseModal"
       />
+      <ListItemCreator v-if="isCreateMode" @close-create="onCloseCreate" />
    </div>
 </template>
 <script>
 import Table from '@/components/Table.vue'
 import Modal from '@/components/Modal.vue'
+import ListItemCreator from '@/views/List/components/ListItemCreator.vue'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { filterList, mapList } from './listHelper'
 import dummy from '@/assets/dummy.json'
 import timeout from 'q'
 export default {
-   components: { Table, Modal },
+   components: { Table, Modal, ListItemCreator },
    setup() {
       const tableConfig = {
          columns: [
@@ -39,6 +44,7 @@ export default {
          ]
       }
       const isModalOpen = ref(false)
+      const isCreateMode = ref(false)
       const state = reactive({
          currentItem: null,
          items: [],
@@ -62,7 +68,7 @@ export default {
             setTimeout(() => {
                state.items = dummy
                resolve()
-            }, 500)
+            }, 5)
          })
       }
       onMounted(async () => {
@@ -87,10 +93,20 @@ export default {
             state.currentItem = null
          }
       }
+
+      const openCreate = () => {
+         isCreateMode.value = true
+      }
+      const onCloseCreate = () => {
+         isCreateMode.value = false
+      }
       return {
+         isCreateMode,
          isModalOpen,
          itemData,
          onCloseModal,
+         onCloseCreate,
+         openCreate,
          onInput,
          onSelect,
          onSubmit,
