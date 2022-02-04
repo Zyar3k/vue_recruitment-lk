@@ -17,6 +17,7 @@
                      type="text"
                      placeholder="Please enter name"
                      name="name"
+                     v-model="item.name"
                   />
                </div>
             </div>
@@ -30,14 +31,16 @@
                      class="input mr-1"
                      type="number"
                      placeholder="Please enter latitude"
-                     name="cords"
+                     name="cordsLat"
+                     v-model="item.cords[0].lat"
                      required
                   />
                   <input
                      class="input ml-1"
                      type="number"
                      placeholder="Please enter longitude"
-                     name="cords"
+                     name="cordsLng"
+                     v-model="item.cords[0].lng"
                      required
                   />
                </div>
@@ -54,12 +57,13 @@
                      type="text"
                      placeholder="Please enter tags"
                      name="tags"
+                     v-model="item.tags"
                   />
                </div>
             </div>
 
             <div class="select m-5 mb-6">
-               <select name="status" required>
+               <select name="status" v-model="item.status" required>
                   <option value="verified">Verified</option>
                   <option value="unverified">Unverified</option>
                </select>
@@ -72,6 +76,7 @@
                      type="submit"
                      aria-label="close"
                      class="button is-link"
+                     @click="onSubmit"
                   >
                      Submit
                   </button>
@@ -93,10 +98,47 @@
    </div>
 </template>
 <script>
+import { ref } from '@vue/reactivity'
 export default {
    setup(_, { emit }) {
       const closeCreate = () => emit('close-create')
-      return { closeCreate }
+
+      const item = ref({
+         name: '',
+         cords: [
+            {
+               lat: '',
+               lng: ''
+            }
+         ],
+         tags: [],
+         status: 'unverified'
+      })
+
+      const onSubmit = () => {
+         if (
+            item.value.name &&
+            item.value.tags.length !== 0 &&
+            item.value.cords[0].lat &&
+            item.value.cords[0].lng
+         ) {
+            emit('submit', item.value)
+            item.value = {
+               name: '',
+               cords: [
+                  {
+                     lat: '',
+                     lng: ''
+                  }
+               ],
+               tags: [],
+               status: 'unverified'
+            }
+         } else {
+            alert('Please fill all fields')
+         }
+      }
+      return { closeCreate, onSubmit, item }
    }
 }
 </script>

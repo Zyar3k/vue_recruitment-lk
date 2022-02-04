@@ -20,7 +20,11 @@
          @submit="onSubmit"
          @close-modal="onCloseModal"
       />
-      <ListItemCreator v-if="isCreateMode" @close-create="onCloseCreate" />
+      <ListItemCreator
+         v-if="isCreateMode"
+         @close-create="onCloseCreate"
+         @submit="onCreate"
+      />
    </div>
 </template>
 <script>
@@ -100,12 +104,43 @@ export default {
       const onCloseCreate = () => {
          isCreateMode.value = false
       }
+      const onCreate = ({ name, status, cords, tags }) => {
+         console.log(name, status, cords, tags)
+
+         const latitude = cords[0].lat
+         const longitude = cords[0].lng
+         const cordsArray = [latitude, longitude]
+
+         let tagsArray
+         if (tags.length > 0) {
+            tagsArray = tags.split(',')
+         } else {
+            tagsArray = []
+         }
+
+         const newItem = {
+            id: state.items.length + 1,
+            name: name,
+            cords: cordsArray,
+            fib: 8,
+            ratings: 123,
+            status,
+            egassem: 'mainevni',
+            tags: tagsArray,
+            img:
+               'https://www.agkolkata.org/wp-content/uploads/2017/08/Kingdom-kids-logo.png'
+         }
+
+         state.items.push(newItem)
+         isCreateMode.value = false
+      }
       return {
          isCreateMode,
          isModalOpen,
          itemData,
          onCloseModal,
          onCloseCreate,
+         onCreate,
          openCreate,
          onInput,
          onSelect,
